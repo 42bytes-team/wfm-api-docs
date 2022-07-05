@@ -79,6 +79,14 @@ components:
       schema:
         type: string
         format: ObjectId
+    order_id:
+      name: order_id
+      in: path
+      description: ObjectId of order
+      required: true
+      schema:
+        type: string
+        format: ObjectId
     buyout_policy:
       name: buyout_policy
       in: query
@@ -303,7 +311,6 @@ components:
           type: boolean
           description: used only while searching for auctions
           example: true
-
     rivenAuction:
       type: object
       properties:
@@ -1139,7 +1146,24 @@ components:
           type: string
           description: Mission name
           example: Void Storm
-
+    updateOrderRequest:
+      type: object
+      properties:
+        order_id:
+          description: Order id of order you want to update
+          format: ObjectId
+          example: 5a2feeb1c2c9e90cbdaa23d2
+          type: string
+        platinum:
+          type: number
+          example: 52
+        quantity:
+          type: number
+          example: 3
+        visible:
+          description: Should order be public
+          example: true
+          type: boolean
 tags:
   - name: Auth
     description: Login, Logout, Registration and password restoration.
@@ -1325,6 +1349,33 @@ paths:
                 required:
                   - payload
 
+  /profile/orders/{order_id}:
+    put:
+      summary: Updates an order
+      parameters:
+        - $ref: "#/components/parameters/order_id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/updateOrderRequest"
+
+      tags:
+        - Profile
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  payload:
+                    type: object
+                    properties:
+                      order_id:
+                        type: string
   /profile/orders:
     post:
       tags:
