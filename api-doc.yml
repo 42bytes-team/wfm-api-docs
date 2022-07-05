@@ -1446,6 +1446,190 @@ components:
           type: string
           nullable: true
           enum: [intact, exceptional, flawless, radiant]
+    profileAchievment:
+      type: object
+      properties:
+        description:
+          type: string
+        exposed:
+          type: boolean
+        icon:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+    getOrderItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: ObjectId
+          example: 5a2feeb1c2c9e90cbdaa23d2
+        ducats:
+          type: number
+        icon:
+          type: string
+        icon_format:
+          type: string
+          enum: [land, port]
+        sub_icon:
+          type: string
+        thumb:
+          type: string
+        url_name:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        quantity_for_set:
+          type: number
+        en:
+          type: object
+          properties:
+            item_name:
+              type: string
+              description: "Name of the item"
+              example: Axi A1 Relic
+        ru:
+          type: object
+          properties:
+            item_name:
+              type: string
+              description: "Name of the item"
+              example: Реликвия Акси A1
+        ko:
+          type: object
+          properties:
+            item_name:
+              type: string
+              description: "Name of the item"
+              example: 액시 A1 성유물
+        fr:
+          type: object
+          properties:
+            item_name:
+              type: string
+              description: "Name of the item"
+              example: Relique Axi A1
+        de:
+          type: object
+          properties:
+            item_name:
+              type: string
+              description: "Name of the item"
+              example: "Axi-relikt: A1"
+        sv:
+          type: object
+          properties:
+            item_name:
+              type: string
+              description: "Name of the item"
+              example: Axi A1 Relic
+        zh_hant:
+          type: object
+          properties:
+            item_name:
+              type: string
+              description: "Name of the item"
+              example: 後紀 A1 遺物
+        zh_hans:
+          type: object
+          properties:
+            item_name:
+              type: string
+              description: "Name of the item"
+              example: 后纪 A1 遗物
+        pt:
+          type: object
+          properties:
+            item_name:
+              type: string
+              description: "Name of the item"
+              example: Relíquia Axi A1
+        es:
+          type: object
+          properties:
+            item_name:
+              type: string
+              description: "Name of the item"
+              example: Reliquia Axi A1
+        pl:
+          type: object
+          properties:
+            item_name:
+              type: string
+              description: "Name of the item"
+              example: Relikt Axi A1
+    getOrder:
+      type: object
+      properties:
+        id:
+          type: string
+          format: ObjectId
+          example: 5a2feeb1c2c9e90cbdaa23d2
+        item:
+          $ref: "#components/schemas/getOrderItem"
+
+    getOrdersResponse:
+      properties:
+        payload:
+          type: object
+          properties:
+            sell_orders:
+              type: array
+              items:
+                $ref: "#/components/schemas/getOrder"
+            buy_orders:
+              type: array
+              items:
+                $ref: "#/components/schemas/getOrder"
+        include:
+          nullable: true
+          description: If include is true this will contain the users profile
+          type: object
+          properties:
+            id:
+              type: string
+              format: ObjectId
+              example: 5a2feeb1c2c9e90cbdaa23d2
+            about:
+              type: string
+            about_raw:
+              type: string
+            achievements:
+              type: array
+              items:
+                $ref: "#/components/schemas/profileAchievment"
+            avatar:
+              type: string
+              nullable: true
+            background:
+              type: string
+              nullable: true
+            banned:
+              type: boolean
+            ingame_name:
+              type: string
+            last_seen:
+              type: string
+              format: date
+            own_profile:
+              type: boolean
+            platform:
+              type: string
+              enum: ["xbox", "pc", "ps4", "switch"]
+            region:
+              type: string
+              example: "en"
+            reputation:
+              type: number
+              example: 1
+            status:
+              type: string
+              enum: [ingame, offline, online]
+
 tags:
   - name: Auth
     description: Login, Logout, Registration and password restoration.
@@ -1720,7 +1904,33 @@ paths:
                                 type: object
                                 allOf:
                                   - $ref: "#/components/schemas/ItemInOrder"
-
+  /profile/{account_name}/orders:
+    get:
+      summary: Gets orders for account name
+      tags:
+        - Profile
+      parameters:
+        - in: path
+          name: account_name
+          required: true
+          description: Account name of the profile you want to get orders for
+          schema:
+            type: string
+        - name: include
+          in: query
+          required: false
+          description: |
+            Include additional information.
+            Will add a new response section with all information about requested account name's profile.
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getOrdersResponse"
   /auth/signin:
     post:
       tags:
