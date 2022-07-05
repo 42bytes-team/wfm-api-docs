@@ -1371,6 +1371,52 @@ components:
                       properties:
                         item_name:
                           type: string
+    orderSoldResponse:
+      type: object
+      properties:
+        payload:
+          type: object
+          properties:
+            order:
+              description: If "order" is null the order was deleted or didn't exist?
+              nullable: true
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: ObjectId
+                  example: 5a2feeb1c2c9e90cbdaa23d2
+                platinum:
+                  type: number
+                  example: 52
+                quantity:
+                  type: number
+                  example: 3
+                order_type:
+                  type: string
+                  enum: [buy, sell]
+                  example: sell
+                platform:
+                  type: string
+                  enum: ["xbox", "pc", "ps4", "switch"]
+                  example: pc
+                region:
+                  type: string
+                  example: en
+                creation_date:
+                  type: string
+                  format: date
+                last_update:
+                  type: string
+                  format: date
+                visible:
+                  description: Should order be public
+                  example: true
+                  type: boolean
+                item:
+                  type: string
+                  format: ObjectId
+                  example: 5a2feeb1c2c9e90cbdaa23d2
     createOrderRequest:
       type: object
       properties:
@@ -1625,6 +1671,20 @@ paths:
                       order_id:
                         type: string
 
+  /profile/orders/close/{order_id}:
+    put:
+      tags:
+        - Profile
+      parameters:
+        - $ref: "#/components/parameters/order_id"
+      summary: Decreases the quantity count by 1 (aka sold 1 item)
+      responses:
+        "200":
+          description: Quantity was decreased by 1
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/orderSoldResponse"
   /profile/orders:
     post:
       tags:
