@@ -1639,6 +1639,8 @@ tags:
     description: Profile and orders management.
   - name: Liches
     description: Provides all information about lich data models.
+  - name: Misc
+    description: Additional miscellaneous endpoints
   - name: Rivens
     description: Provides all information about riven data models.
   - name: Auctions
@@ -2671,3 +2673,72 @@ paths:
                         type: array
                         items:
                           $ref: "#/components/schemas/rivenAttribute"
+
+  /locations:
+    get:
+      tags:
+        - Misc
+      summary: Get a list of known game locations.
+      parameters:
+        - $ref: "#/components/parameters/language"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  payload:
+                    type: object
+                    properties:
+                      locations:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Location"
+
+  /npc:
+    get:
+      tags:
+        - Misc
+      summary: Get a list of known NPCs.
+      parameters:
+        - $ref: "#/components/parameters/language"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  payload:
+                    type: object
+                    properties:
+                      npc:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Npc"
+
+  /missions:
+    get:
+      tags:
+        - Misc
+      summary: Get a list of known NPCs.
+      parameters:
+        - $ref: "#/components/parameters/language"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  payload:
+                    type: object
+                    properties:
+                      missions:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Mission"
