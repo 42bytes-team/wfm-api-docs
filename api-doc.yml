@@ -1164,6 +1164,242 @@ components:
           description: Should order be public
           example: true
           type: boolean
+    orderType:
+      type: string
+      enum:
+        - buy
+        - sell
+      example:
+        - buy
+    updateOrderResponse:
+      type: object
+      properties:
+        payload:
+          type: object
+          properties:
+            order:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: ObjectId
+                  example: 5a2feeb1c2c9e90cbdaa23d2
+                platinum:
+                  type: number
+                  example: 52
+                quantity:
+                  type: number
+                  example: 3
+                order_type:
+                  type: string
+                  enum: [buy, sell]
+                  example: sell
+                platform:
+                  type: string
+                  enum: ["xbox", "pc", "ps4", "switch"]
+                  example: pc
+                region:
+                  type: string
+                  example: en
+                creation_date:
+                  type: string
+                  format: date
+                last_update:
+                  type: string
+                  format: date
+                visible:
+                  description: Should order be public
+                  example: true
+                  type: boolean
+                item:
+                  type: object
+                  properties:
+                    description:
+                      type: string
+                    en:
+                      type: object
+                      properties:
+                        item_name:
+                          type: string
+                    ru:
+                      type: object
+                      properties:
+                        item_name:
+                          type: string
+                    ko:
+                      type: object
+                      properties:
+                        item_name:
+                          type: string
+                    fr:
+                      type: object
+                      properties:
+                        item_name:
+                          type: string
+                    de:
+                      type: object
+                      properties:
+                        item_name:
+                          type: string
+                    sv:
+                      type: object
+                      properties:
+                        item_name:
+                          type: string
+                    zh_hant:
+                      type: object
+                      properties:
+                        item_name:
+                          type: string
+                    zh_hans:
+                      type: object
+                      properties:
+                        item_name:
+                          type: string
+                    pt:
+                      type: object
+                      properties:
+                        item_name:
+                          type: string
+                    es:
+                      type: object
+                      properties:
+                        item_name:
+                          type: string
+                    pl:
+                      type: object
+                      properties:
+                        item_name:
+                          type: string
+    createOrderResponse:
+      type: object
+      properties:
+        payload:
+          type: object
+          properties:
+            order:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: ObjectId
+                  example: 5a2feeb1c2c9e90cbdaa23d2
+                platinum:
+                  type: number
+                  example: 52
+                quantity:
+                  type: number
+                  example: 3
+                order_type:
+                  type: string
+                  enum: [buy, sell]
+                  example: sell
+                platform:
+                  type: string
+                  enum: ["xbox", "pc", "ps4", "switch"]
+                  example: pc
+                region:
+                  type: string
+                  example: en
+                creation_date:
+                  type: string
+                  format: date
+                last_update:
+                  type: string
+                  format: date
+                visible:
+                  description: Should order be public
+                  example: true
+                  type: boolean
+                item:
+                  type: object
+                  properties:
+                    description:
+                      type: string
+                    en:
+                      type: object
+                      properties:
+                        item_name:
+                          type: string
+                    ru:
+                      type: object
+                      properties:
+                        item_name:
+                          type: string
+                    ko:
+                      type: object
+                      properties:
+                        item_name:
+                          type: string
+                    fr:
+                      type: object
+                      properties:
+                        item_name:
+                          type: string
+                    de:
+                      type: object
+                      properties:
+                        item_name:
+                          type: string
+                    sv:
+                      type: object
+                      properties:
+                        item_name:
+                          type: string
+                    zh_hant:
+                      type: object
+                      properties:
+                        item_name:
+                          type: string
+                    zh_hans:
+                      type: object
+                      properties:
+                        item_name:
+                          type: string
+                    pt:
+                      type: object
+                      properties:
+                        item_name:
+                          type: string
+                    es:
+                      type: object
+                      properties:
+                        item_name:
+                          type: string
+                    pl:
+                      type: object
+                      properties:
+                        item_name:
+                          type: string
+    createOrderRequest:
+      type: object
+      properties:
+        item:
+          type: string
+          format: ObjectID
+          description: ObjectId of an item
+          example: 59e203ce115f1d887cfd7ac6
+        order_type:
+          type: string
+          enum: [buy, sell]
+          example: sell
+        platinum:
+          type: number
+          example: 52
+        quantity:
+          type: number
+          example: 3
+        visible:
+          type: boolean
+          example: true
+        rank:
+          type: number
+          nullable: true
+          example: 1
+        subtype:
+          type: string
+          nullable: true
+          enum: [intact, exceptional, flawless, radiant]
 tags:
   - name: Auth
     description: Login, Logout, Registration and password restoration.
@@ -1360,7 +1596,19 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/updateOrderRequest"
-
+      tags:
+        - Profile
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/updateOrderResponse"
+    delete:
+      summary: Deletes an order
+      parameters:
+        - $ref: "#/components/parameters/order_id"
       tags:
         - Profile
       responses:
@@ -1376,6 +1624,7 @@ paths:
                     properties:
                       order_id:
                         type: string
+
   /profile/orders:
     post:
       tags:
@@ -1389,35 +1638,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                item:
-                  type: string
-                  format: ObjectID
-                  description: ObjectId of an item
-                  example: 59e203ce115f1d887cfd7ac6
-                order_type:
-                  type: string
-                  enum:
-                    - sell
-                    - buy
-                  example: sell
-                platinum:
-                  type: integer
-                  example: 12
-                quantity:
-                  type: integer
-                  example: 5
-                visible:
-                  type: boolean
-                  example: true
-                rank:
-                  type: integer
-                  example: 3
-                subtype:
-                  type: string
-                  example: "flawless"
-                  description: "Check item `subtypes` field for possible values"
+              $ref: "#/components/schemas/createOrderRequest"
       responses:
         "200":
           description: created
