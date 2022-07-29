@@ -79,6 +79,14 @@ components:
       schema:
         type: string
         format: ObjectId
+    order_id:
+      name: order_id
+      in: path
+      description: ObjectId of order
+      required: true
+      schema:
+        type: string
+        format: ObjectId
     buyout_policy:
       name: buyout_policy
       in: query
@@ -303,7 +311,6 @@ components:
           type: boolean
           description: used only while searching for auctions
           example: true
-
     rivenAuction:
       type: object
       properties:
@@ -868,7 +875,7 @@ components:
         visible:
           type: boolean
           example: true
-          description: | 
+          description: |
             Is this order visible?
             All public orders will be visible, and only orders in your profile could be invisible.
     OrderRow:
@@ -911,7 +918,19 @@ components:
                 type: number
               item_subtype:
                 type: string
-                enum: ["intact", "exceptional", "flawless", "radiant", "small", "medium", "large", "basic", "adorned", "magnificent"]
+                enum:
+                  [
+                    "intact",
+                    "exceptional",
+                    "flawless",
+                    "radiant",
+                    "small",
+                    "medium",
+                    "large",
+                    "basic",
+                    "adorned",
+                    "magnificent",
+                  ]
               rotation:
                 type: string
                 enum: ["a", "b", "c"]
@@ -971,7 +990,7 @@ components:
       properties:
         type:
           type: string
-          enum: ['npc']
+          enum: ["npc"]
         item:
           type: string
           description: id of an item
@@ -986,15 +1005,15 @@ components:
           type: number
           example: 4.5
           description: Chance to get item on kill
-        rarity: 
-          $ref: '#/components/schemas/rarities'
+        rarity:
+          $ref: "#/components/schemas/rarities"
     MissionDropData:
       type: object
       description: What you can get from this mission as reward
       properties:
         type:
           type: string
-          enum: ['mission']
+          enum: ["mission"]
         item:
           type: string
           description: id of an item
@@ -1014,18 +1033,18 @@ components:
           type: number
           example: 4.5
           description: Chance to get item on mission completion or rotation completion
-        rarity: 
-          $ref: '#/components/schemas/rarities'
-        rotation: 
+        rarity:
+          $ref: "#/components/schemas/rarities"
+        rotation:
           type: string
-          enum: ["b", 'a', 'c']
+          enum: ["b", "a", "c"]
     RelicDropData:
       type: object
       description: What you can get from this relic
       properties:
         type:
           type: string
-          enum: ['relic']
+          enum: ["relic"]
         item:
           type: string
           description: id of an item
@@ -1039,7 +1058,7 @@ components:
         rates:
           type: object
           properties:
-            intact: 
+            intact:
               type: number
               example: 5
               description: chance to get an item from intact relic
@@ -1047,16 +1066,16 @@ components:
               type: number
               example: 5
               description: chance to get an item from exceptional relic
-            flawless: 
+            flawless:
               type: number
               example: 5
               description: chance to get an item from flawless relic
-            radiant: 
+            radiant:
               type: number
               example: 5
               description: chance to get an item from radiant relic
-        rarity: 
-          $ref: '#/components/schemas/rarities'
+        rarity:
+          $ref: "#/components/schemas/rarities"
     Location:
       type: object
       description: SolNodes basically
@@ -1127,6 +1146,489 @@ components:
           type: string
           description: Mission name
           example: Void Storm
+    updateOrderRequest:
+      type: object
+      properties:
+        order_id:
+          description: Order id of order you want to update
+          format: ObjectId
+          example: 5a2feeb1c2c9e90cbdaa23d2
+          type: string
+        platinum:
+          type: number
+          example: 52
+        quantity:
+          type: number
+          example: 3
+        visible:
+          description: Should order be public
+          example: true
+          type: boolean
+    orderType:
+      type: string
+      enum:
+        - buy
+        - sell
+      example:
+        - buy
+    updateOrderResponse:
+      type: object
+      properties:
+        payload:
+          type: object
+          properties:
+            order:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: ObjectId
+                  example: 5a2feeb1c2c9e90cbdaa23d2
+                platinum:
+                  type: number
+                  example: 52
+                quantity:
+                  type: number
+                  example: 3
+                order_type:
+                  type: string
+                  enum: [buy, sell]
+                  example: sell
+                platform:
+                  type: string
+                  enum: ["xbox", "pc", "ps4", "switch"]
+                  example: pc
+                region:
+                  type: string
+                  example: en
+                creation_date:
+                  type: string
+                  format: date
+                last_update:
+                  type: string
+                  format: date
+                visible:
+                  description: Should order be public
+                  example: true
+                  type: boolean
+                item:
+                  type: object
+                  properties:
+                    description:
+                      type: string
+                    en:
+                      type: object
+                      properties:
+                        item_name:
+                          type: string
+                    ru:
+                      type: object
+                      properties:
+                        item_name:
+                          type: string
+                    ko:
+                      type: object
+                      properties:
+                        item_name:
+                          type: string
+                    fr:
+                      type: object
+                      properties:
+                        item_name:
+                          type: string
+                    de:
+                      type: object
+                      properties:
+                        item_name:
+                          type: string
+                    sv:
+                      type: object
+                      properties:
+                        item_name:
+                          type: string
+                    zh_hant:
+                      type: object
+                      properties:
+                        item_name:
+                          type: string
+                    zh_hans:
+                      type: object
+                      properties:
+                        item_name:
+                          type: string
+                    pt:
+                      type: object
+                      properties:
+                        item_name:
+                          type: string
+                    es:
+                      type: object
+                      properties:
+                        item_name:
+                          type: string
+                    pl:
+                      type: object
+                      properties:
+                        item_name:
+                          type: string
+    createOrderResponse:
+      type: object
+      properties:
+        payload:
+          type: object
+          properties:
+            order:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: ObjectId
+                  example: 5a2feeb1c2c9e90cbdaa23d2
+                platinum:
+                  type: number
+                  example: 52
+                quantity:
+                  type: number
+                  example: 3
+                order_type:
+                  type: string
+                  enum: [buy, sell]
+                  example: sell
+                platform:
+                  type: string
+                  enum: ["xbox", "pc", "ps4", "switch"]
+                  example: pc
+                region:
+                  type: string
+                  example: en
+                creation_date:
+                  type: string
+                  format: date
+                last_update:
+                  type: string
+                  format: date
+                visible:
+                  description: Should order be public
+                  example: true
+                  type: boolean
+                item:
+                  type: object
+                  properties:
+                    description:
+                      type: string
+                    en:
+                      type: object
+                      properties:
+                        item_name:
+                          type: string
+                    ru:
+                      type: object
+                      properties:
+                        item_name:
+                          type: string
+                    ko:
+                      type: object
+                      properties:
+                        item_name:
+                          type: string
+                    fr:
+                      type: object
+                      properties:
+                        item_name:
+                          type: string
+                    de:
+                      type: object
+                      properties:
+                        item_name:
+                          type: string
+                    sv:
+                      type: object
+                      properties:
+                        item_name:
+                          type: string
+                    zh_hant:
+                      type: object
+                      properties:
+                        item_name:
+                          type: string
+                    zh_hans:
+                      type: object
+                      properties:
+                        item_name:
+                          type: string
+                    pt:
+                      type: object
+                      properties:
+                        item_name:
+                          type: string
+                    es:
+                      type: object
+                      properties:
+                        item_name:
+                          type: string
+                    pl:
+                      type: object
+                      properties:
+                        item_name:
+                          type: string
+    orderSoldResponse:
+      type: object
+      properties:
+        payload:
+          type: object
+          properties:
+            order:
+              description: If "order" is null the order was deleted or didn't exist?
+              nullable: true
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: ObjectId
+                  example: 5a2feeb1c2c9e90cbdaa23d2
+                platinum:
+                  type: number
+                  example: 52
+                quantity:
+                  type: number
+                  example: 3
+                order_type:
+                  type: string
+                  enum: [buy, sell]
+                  example: sell
+                platform:
+                  type: string
+                  enum: ["xbox", "pc", "ps4", "switch"]
+                  example: pc
+                region:
+                  type: string
+                  example: en
+                creation_date:
+                  type: string
+                  format: date
+                last_update:
+                  type: string
+                  format: date
+                visible:
+                  description: Should order be public
+                  example: true
+                  type: boolean
+                item:
+                  type: string
+                  format: ObjectId
+                  example: 5a2feeb1c2c9e90cbdaa23d2
+    createOrderRequest:
+      type: object
+      properties:
+        item:
+          type: string
+          format: ObjectID
+          description: ObjectId of an item
+          example: 59e203ce115f1d887cfd7ac6
+        order_type:
+          type: string
+          enum: [buy, sell]
+          example: sell
+        platinum:
+          type: number
+          example: 52
+        quantity:
+          type: number
+          example: 3
+        visible:
+          type: boolean
+          example: true
+        rank:
+          type: number
+          nullable: true
+          example: 1
+        subtype:
+          type: string
+          nullable: true
+          enum: [intact, exceptional, flawless, radiant]
+    profileAchievment:
+      type: object
+      properties:
+        description:
+          type: string
+        exposed:
+          type: boolean
+        icon:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+    getOrderItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: ObjectId
+          example: 5a2feeb1c2c9e90cbdaa23d2
+        ducats:
+          type: number
+        icon:
+          type: string
+        icon_format:
+          type: string
+          enum: [land, port]
+        sub_icon:
+          type: string
+        thumb:
+          type: string
+        url_name:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        quantity_for_set:
+          type: number
+        en:
+          type: object
+          properties:
+            item_name:
+              type: string
+              description: "Name of the item"
+              example: Axi A1 Relic
+        ru:
+          type: object
+          properties:
+            item_name:
+              type: string
+              description: "Name of the item"
+              example: Реликвия Акси A1
+        ko:
+          type: object
+          properties:
+            item_name:
+              type: string
+              description: "Name of the item"
+              example: 액시 A1 성유물
+        fr:
+          type: object
+          properties:
+            item_name:
+              type: string
+              description: "Name of the item"
+              example: Relique Axi A1
+        de:
+          type: object
+          properties:
+            item_name:
+              type: string
+              description: "Name of the item"
+              example: "Axi-relikt: A1"
+        sv:
+          type: object
+          properties:
+            item_name:
+              type: string
+              description: "Name of the item"
+              example: Axi A1 Relic
+        zh_hant:
+          type: object
+          properties:
+            item_name:
+              type: string
+              description: "Name of the item"
+              example: 後紀 A1 遺物
+        zh_hans:
+          type: object
+          properties:
+            item_name:
+              type: string
+              description: "Name of the item"
+              example: 后纪 A1 遗物
+        pt:
+          type: object
+          properties:
+            item_name:
+              type: string
+              description: "Name of the item"
+              example: Relíquia Axi A1
+        es:
+          type: object
+          properties:
+            item_name:
+              type: string
+              description: "Name of the item"
+              example: Reliquia Axi A1
+        pl:
+          type: object
+          properties:
+            item_name:
+              type: string
+              description: "Name of the item"
+              example: Relikt Axi A1
+    getOrder:
+      type: object
+      properties:
+        id:
+          type: string
+          format: ObjectId
+          example: 5a2feeb1c2c9e90cbdaa23d2
+        item:
+          $ref: "#components/schemas/getOrderItem"
+
+    getOrdersResponse:
+      properties:
+        payload:
+          type: object
+          properties:
+            sell_orders:
+              type: array
+              items:
+                $ref: "#/components/schemas/getOrder"
+            buy_orders:
+              type: array
+              items:
+                $ref: "#/components/schemas/getOrder"
+        include:
+          nullable: true
+          description: If include is true this will contain the users profile
+          type: object
+          properties:
+            id:
+              type: string
+              format: ObjectId
+              example: 5a2feeb1c2c9e90cbdaa23d2
+            about:
+              type: string
+            about_raw:
+              type: string
+            achievements:
+              type: array
+              items:
+                $ref: "#/components/schemas/profileAchievment"
+            avatar:
+              type: string
+              nullable: true
+            background:
+              type: string
+              nullable: true
+            banned:
+              type: boolean
+            ingame_name:
+              type: string
+            last_seen:
+              type: string
+              format: date
+            own_profile:
+              type: boolean
+            platform:
+              type: string
+              enum: ["xbox", "pc", "ps4", "switch"]
+            region:
+              type: string
+              example: "en"
+            reputation:
+              type: number
+              example: 1
+            status:
+              type: string
+              enum: [ingame, offline, online]
 
 tags:
   - name: Auth
@@ -1137,10 +1639,10 @@ tags:
     description: Profile and orders management.
   - name: Liches
     description: Provides all information about lich data models.
-  - name: Rivens
-    description: Provides all information about riven data models.
   - name: Misc
     description: Additional miscellaneous endpoints
+  - name: Rivens
+    description: Provides all information about riven data models.
   - name: Auctions
     description: Search, popular, most recent and auction creation endpoints
   - name: Auction Entry
@@ -1315,6 +1817,60 @@ paths:
                 required:
                   - payload
 
+  /profile/orders/{order_id}:
+    put:
+      summary: Updates an order
+      parameters:
+        - $ref: "#/components/parameters/order_id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/updateOrderRequest"
+      tags:
+        - Profile
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/updateOrderResponse"
+    delete:
+      summary: Deletes an order
+      parameters:
+        - $ref: "#/components/parameters/order_id"
+      tags:
+        - Profile
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  payload:
+                    type: object
+                    properties:
+                      order_id:
+                        type: string
+
+  /profile/orders/close/{order_id}:
+    put:
+      tags:
+        - Profile
+      parameters:
+        - $ref: "#/components/parameters/order_id"
+      summary: Decreases the quantity count by 1 (aka sold 1 item)
+      responses:
+        "200":
+          description: Quantity was decreased by 1
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/orderSoldResponse"
   /profile/orders:
     post:
       tags:
@@ -1328,35 +1884,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                item:
-                  type: string
-                  format: ObjectID
-                  description: ObjectId of an item
-                  example: 59e203ce115f1d887cfd7ac6
-                order_type:
-                  type: string
-                  enum:
-                    - sell
-                    - buy
-                  example: sell
-                platinum:
-                  type: integer
-                  example: 12
-                quantity:
-                  type: integer
-                  example: 5
-                visible:
-                  type: boolean
-                  example: true
-                rank:
-                  type: integer
-                  example: 3
-                subtype:
-                  type: string
-                  example: "flawless"
-                  description: "Check item `subtypes` field for possible values"
+              $ref: "#/components/schemas/createOrderRequest"
       responses:
         "200":
           description: created
@@ -1378,7 +1906,33 @@ paths:
                                 type: object
                                 allOf:
                                   - $ref: "#/components/schemas/ItemInOrder"
-
+  /profile/{account_name}/orders:
+    get:
+      summary: Gets orders for account name
+      tags:
+        - Profile
+      parameters:
+        - in: path
+          name: account_name
+          required: true
+          description: Account name of the profile you want to get orders for
+          schema:
+            type: string
+        - name: include
+          in: query
+          required: false
+          description: |
+            Include additional information.
+            Will add a new response section with all information about requested account name's profile.
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getOrdersResponse"
   /auth/signin:
     post:
       tags:
@@ -2188,5 +2742,3 @@ paths:
                         type: array
                         items:
                           $ref: "#/components/schemas/Mission"
-
-
