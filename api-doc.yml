@@ -889,7 +889,7 @@ components:
               $ref: "#/components/schemas/userShort"
             item:
               $ref: "#/components/schemas/ItemInOrder"
-    Droptable:
+    Dropsource:
       type: object
       properties:
         missions:
@@ -1266,11 +1266,11 @@ paths:
                 required:
                   - payload
 
-  /items/{url_name}/droptables:
+  /items/{url_name}/dropsources:
     get:
       tags:
         - Items
-      summary: Get droptables for a given item
+      summary: Get dropsources for a given item
       parameters:
         - $ref: "#/components/parameters/language"
         - $ref: "#/components/parameters/url_name"
@@ -1294,10 +1294,10 @@ paths:
                   payload:
                     type: object
                     properties:
-                      droptables:
+                      dropsources:
                         type: object
                         allOf:
-                          - $ref: "#/components/schemas/Droptable"
+                          - $ref: "#/components/schemas/Dropsource"
                   include:
                     type: object
                     properties:
