@@ -349,7 +349,7 @@ components:
           type: integer
           minimum: 0
           maximum: 10
-    nemesisWeapon:
+    lichWeapon:
       type: object
       properties:
         id:
@@ -376,7 +376,7 @@ components:
         item_name:
           type: string
           description: Name of the weapon
-    nemesisEphemera:
+    lichEphemera:
       type: object
       properties:
         id:
@@ -416,7 +416,7 @@ components:
           type: string
           description: Name of the ephemera
           example: Vengeful Shockwave Ephemera
-    nemesisQuirk:
+    lichQuirk:
       type: object
       properties:
         id:
@@ -632,6 +632,11 @@ components:
           example: icons/en/axi_a1_relic.a74c06f0cae21bdb8933685c867385f8.png
           description: |
             it's a part of url, if you want to get an image you need to prepend assets root dirrectory: `http://warframe.market/static/assets/`
+        icon_format:
+          type: string
+          enum:
+            - land
+            - port
         thumb:
           type: string
           example: /icons/en/thumbs/axi_a1_relic.a74c06f0cae21bdb8933685c867385f8.128x128.png
@@ -657,15 +662,12 @@ components:
           items:
             type: string
           example: ["relic", "axi"]
-        cyan_stars:
-          type: integer
-          description: "will be introduced in update 1.8.3 and will replace rank for sculptures"
-        amber_stars:
-          type: integer
-          description: "will be introduced in update 1.8.3 and will replace rank for sculptures"
         ducats:
           type: integer
           example: 45
+        quantity_for_set:
+          type: integer
+          example: 1
     ItemInOrder:
       type: object
       description: "same as ItemFull, but with dried up lang related fields and without rarity, set_root, MR, trading tax"
@@ -761,12 +763,12 @@ components:
               type: boolean
               example: false
               description: This item represents set itself
-            mastery_rank:
+            mastery_level:
               type: integer
               example: 12
               description: Mastery requirenment fro this item
             rarity:
-              type: integer
+              type: string
               description: Item rarity
               example: rare
               enum:
@@ -1149,8 +1151,6 @@ tags:
     description: Profile and orders management.
   - name: Liches
     description: Provides all information about lich data models.
-  - name: Sisters
-    description: Provide all information about sister data models.
   - name: Rivens
     description: Provides all information about riven data models.
   - name: Misc
@@ -2041,7 +2041,7 @@ paths:
                       weapons:
                         type: array
                         items:
-                          $ref: "#/components/schemas/nemesisWeapon"
+                          $ref: "#/components/schemas/lichWeapon"
 
   /lich/ephemeras:
     get:
@@ -2064,7 +2064,7 @@ paths:
                       ephemeras:
                         type: array
                         items:
-                          $ref: "#/components/schemas/nemesisEphemera"
+                          $ref: "#/components/schemas/lichEphemera"
   /lich/quirks:
     get:
       tags:
@@ -2086,74 +2086,7 @@ paths:
                       quirks:
                         type: array
                         items:
-                          $ref: "#/components/schemas/nemesisQuirk"
-
-  /sister/weapons:
-    get:
-      tags:
-        - Sisters
-      summary: Get a list of sister weapons.
-      parameters:
-        - $ref: "#/components/parameters/language"
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  payload:
-                    type: object
-                    properties:
-                      weapons:
-                        type: array
-                        items:
-                          $ref: "#/components/schemas/nemesisWeapon"
-  /sister/ephermeras:
-    get:
-      tags:
-        - Sisters
-      summary: Get a list of sister ephemras.
-      parameters:
-        - $ref: "#/components/parameters/language"
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  payload:
-                    type: object
-                    properties:
-                      ephemeras:
-                        type: array
-                        items:
-                          $ref: "#/components/schemas/nemesisEphemera"
-  /sister/quirks:
-    get:
-      tags:
-        - Sisters
-      summary: Get a list of sister quirks.
-      parameters:
-        - $ref: "#/components/parameters/language"
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  payload:
-                    type: object
-                    properties:
-                      quirks:
-                        type: array
-                        items:
-                          $ref: "#/components/schemas/nemesisQuirk"
+                          $ref: "#/components/schemas/lichQuirk"
 
   /riven/items:
     get:
