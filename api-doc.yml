@@ -349,7 +349,7 @@ components:
           type: integer
           minimum: 0
           maximum: 10
-    lichWeapon:
+    nemesisWeapon:
       type: object
       properties:
         id:
@@ -376,7 +376,7 @@ components:
         item_name:
           type: string
           description: Name of the weapon
-    lichEphemera:
+    nemesisEphemera:
       type: object
       properties:
         id:
@@ -416,7 +416,7 @@ components:
           type: string
           description: Name of the ephemera
           example: Vengeful Shockwave Ephemera
-    lichQuirk:
+    nemesisQuirk:
       type: object
       properties:
         id:
@@ -1151,6 +1151,8 @@ tags:
     description: Profile and orders management.
   - name: Liches
     description: Provides all information about lich data models.
+  - name: Sisters
+    description: Provide all information about sister data models.
   - name: Rivens
     description: Provides all information about riven data models.
   - name: Misc
@@ -2041,7 +2043,7 @@ paths:
                       weapons:
                         type: array
                         items:
-                          $ref: "#/components/schemas/lichWeapon"
+                          $ref: "#/components/schemas/nemesisWeapon"
 
   /lich/ephemeras:
     get:
@@ -2064,7 +2066,7 @@ paths:
                       ephemeras:
                         type: array
                         items:
-                          $ref: "#/components/schemas/lichEphemera"
+                          $ref: "#/components/schemas/nemesisEphemera"
   /lich/quirks:
     get:
       tags:
@@ -2086,7 +2088,74 @@ paths:
                       quirks:
                         type: array
                         items:
-                          $ref: "#/components/schemas/lichQuirk"
+                          $ref: "#/components/schemas/nemesisQuirk"
+
+  /sister/weapons:
+    get:
+      tags:
+        - Sisters
+      summary: Get a list of sister weapons.
+      parameters:
+        - $ref: "#/components/parameters/language"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  payload:
+                    type: object
+                    properties:
+                      weapons:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/nemesisWeapon"
+  /sister/ephermeras:
+    get:
+      tags:
+        - Sisters
+      summary: Get a list of sister ephemras.
+      parameters:
+        - $ref: "#/components/parameters/language"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  payload:
+                    type: object
+                    properties:
+                      ephemeras:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/nemesisEphemera"
+  /sister/quirks:
+    get:
+      tags:
+        - Sisters
+      summary: Get a list of sister quirks.
+      parameters:
+        - $ref: "#/components/parameters/language"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  payload:
+                    type: object
+                    properties:
+                      quirks:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/nemesisQuirk"
 
   /riven/items:
     get:
