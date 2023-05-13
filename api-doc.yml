@@ -71,6 +71,16 @@ components:
       schema:
         type: string
         example: mirage_prime_systems
+    include_item:
+      name: include
+      in: query
+      required: false
+      description: |
+        Include additional information.  
+        Will add a new response section with all information about requested model.
+      schema:
+        type: string
+        enum: [ item ]
     auction_id:
       name: auction_id
       in: path
@@ -831,6 +841,87 @@ components:
           type: string
           example: Mirage Prime Systems
           description: "depends on you `Language` header"
+    StatisticsClosedNode:
+      type: object
+      properties:
+        datetime:
+          type: string
+          format: date
+          example: "2023-05-13T18:00:00.000+00:00"
+        volume:
+          type: number
+          example: 5
+        min_price:
+          type: number
+          example: 13
+        max_price:
+          type: number
+          example: 20
+        open_price:
+          type: number
+          example: 15
+        closed_price:
+          type: number
+          example: 14
+        avg_price:
+          type: number
+          example: 16.5
+        wa_price:
+          type: number
+          example: 16
+        median:
+          type: number
+          example: 15
+        moving_avg:
+          type: number
+          example: 16
+        donch_top:
+          type: number
+          example: 20
+        donch_bot:
+          type: number
+          example: 12
+        id:
+          type: string
+          format: ObjectId
+          example: 645d6605a8434300226045ab
+    StatisticsLiveNode:
+      type: object
+      properties:
+        datetime:
+          type: string
+          format: date
+          example: "2023-05-11T18:00:00.000+00:00"
+        volume:
+          type: number
+          example: 1280
+        min_price:
+          type: number
+          example: 10
+        max_price:
+          type: number
+          example: 12
+        avg_price:
+          type: number
+          example: 11
+        wa_price:
+          type: number
+          example: 11.614
+        median:
+          type: number
+          example: 11
+        order_type:
+          type: string
+          enum:
+            - sell
+            - buy
+        moving_avg:
+          type: number
+          example: 14.2
+        id:
+          type: string
+          format: ObjectId
+          example: 645d3c0da843430022601a67
     OrderCommon:
       type: object
       properties:
@@ -1234,15 +1325,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/url_name"
         - $ref: "#/components/parameters/platform"
-        - name: include
-          in: query
-          required: false
-          description: |
-            Include additional information.  
-            Will add a new response section with all information about requested model.
-          schema:
-            type: string
-            enum: [item]
+        - $ref: "#/components/parameters/include_item"
       responses:
         "200":
           description: Successful operation, with `?include=item`
@@ -1290,15 +1373,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/language"
         - $ref: "#/components/parameters/url_name"
-        - name: include
-          in: query
-          required: false
-          description: |
-            Include additional information.  
-            Will add a new response section with all information about requested model.
-          schema:
-            type: string
-            enum: [item]
+        - $ref: "#/components/parameters/include_item"
       responses:
         "200":
           description: Successful operation
@@ -1314,6 +1389,65 @@ paths:
                         type: object
                         allOf:
                           - $ref: "#/components/schemas/Dropsource"
+                  include:
+                    type: object
+                    properties:
+                      item:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            description: Object id of requested item
+                            example: 5a2feeb2c2c9e90cbdaa23d4
+                          items_in_set:
+                            type: array
+                            items:
+                              $ref: "#/components/schemas/ItemFull"
+                required:
+                  - payload
+
+  /items/{url_name}/statistics:
+    get:
+      tags:
+        - Items
+      parameters:
+        - $ref: "#/components/parameters/language"
+        - $ref: "#/components/parameters/url_name"
+        - $ref: "#/components/parameters/include_item"
+      summary: Get price statistics for a given item
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  payload:
+                    type: object
+                    properties:
+                      statistics_closed:
+                        type: object
+                        properties:
+                          48hours:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/StatisticsClosedNode'
+                          90days:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/StatisticsClosedNode'
+                      statistics_live:
+                        type: object
+                        properties:
+                          48hours:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/StatisticsLiveNode'
+                          90days:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/StatisticsLiveNode'
                   include:
                     type: object
                     properties:
